@@ -88,7 +88,7 @@ hooks:
 # During the BeforeInstall deployment lifecycle event, run the commands 
 #   in the script specified in "location".
   BeforeInstall:
-    - location: scripts/beforeInstall
+    - location: scripts/beforeInstall.sh
       timeout: 300
       runas: ubuntu
     # - location: 
@@ -97,7 +97,7 @@ hooks:
 # During the AfterInstall deployment lifecycle event, run the commands 
 #   in the script specified in "location".
   AfterInstall:
-    - location: scripts/afterInstall
+    - location: scripts/afterInstall.sh
       timeout: 300
       runas: ubuntu
     # - location: 
@@ -106,7 +106,7 @@ hooks:
 # During the ApplicationStart deployment lifecycle event, run the commands 
 #   in the script specified in "location".
   ApplicationStart:
-    - location: scripts/applicationStart    
+    - location: scripts/applicationStart.sh    
       timeout: 300
       runas: ubuntu
     # - location: 
