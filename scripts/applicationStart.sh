@@ -1,1 +1,1 @@
-npm run node
+sudo npm run node

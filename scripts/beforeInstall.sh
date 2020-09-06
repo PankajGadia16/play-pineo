@@ -8,8 +8,8 @@ set -e
 # sudo apt-get update
 # sudo apt-get install nodejs -y
 
-yum -y update
-yum -y install nodejs
+sudo yum -y update
+sudo yum -y install nodejs
 
 
 # install pm2 module globaly
