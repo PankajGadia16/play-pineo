@@ -1,10 +1,7 @@
-#!/bin/bash
-
-set -e
-
+#!/usr/bin/env bash
 sudo apt update
-sudo apt install nodejs
-sudo apt install npm
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt-get install -y nodejs
 
 # install pm2 module globaly
 # npm install -g pm2
