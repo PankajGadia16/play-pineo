@@ -1,6 +1,6 @@
 #!/bin/bash
+aws ssm get-parameters --output text --region ap-south-1 --names /env/play-pineo --with-decryption --query Parameters[0].Value > /home/ubuntu/code-deploy/.env
 
-# mkdir /home/ubuntu/nodejs
 cd /home/ubuntu/play-pineo
-
+source .env
 sudo npm install
