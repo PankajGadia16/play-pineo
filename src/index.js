@@ -12,6 +12,11 @@ app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+app.get('/', function (req, res) {
+    res.render('index', {});
+});
 app.use("/api", router);
 const server = app.listen(constants.API_PORT, () => console.log(`LISTENING ON PORT ${constants.API_PORT}`));
 export default server
