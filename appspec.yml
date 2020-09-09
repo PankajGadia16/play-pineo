@@ -98,7 +98,7 @@ hooks:
 #   in the script specified in "location".
   AfterInstall:
     - location: scripts/afterInstall.sh
-      timeout: 60
+      timeout: 600
       runas: ubuntu
     # - location: 
     #   timeout:
