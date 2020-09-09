@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --exec babel-node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rimraf dist/ &&  ./node_modules/.bin/babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
+    "build": "rimraf dist/ &&  ./node_modules/.bin/babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log,./frontend --copy-files",
     "node": "npm run build && node dist/src/index.js"
   },
   "devDependencies": {
@@ -14,8 +14,7 @@
     "@babel/node": "^7.7.4",
     "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
-    "nodemon": "^1.19.4",
-    "ejs": "latest"
+    "nodemon": "^1.19.4"
   },
   "repository": {
     "type": "git",
@@ -33,7 +32,7 @@
     "express": "4.17.1",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
-    "mongodb": "^3.3.4",
+    "mongodb": "latest",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
     "rimraf": "3.0.0",
