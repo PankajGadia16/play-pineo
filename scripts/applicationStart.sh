@@ -1,6 +1,6 @@
-cd /home/ubuntu/play-pineo
+cd /home/ubuntu/play-pineo/backend
 sudo npm run build
 # sudo pm2 start dist/src/index.js
-cd frontend
+cd /home/ubuntu/play-pineo/frontend
 sudo npm run build
-sudo pm2 start node_modules/react-scripts/scripts/start.js --name "my-app"
+sudo pm2 start node_modules/react-scripts/scripts/start.js --name "frontend-index"
