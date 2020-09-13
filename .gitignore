@@ -80,7 +80,7 @@ typings/
 
 # Nuxt.js build / generate output
 .nuxt
-backend/dist
+
 
 # Gatsby files
 .cache/
@@ -107,3 +107,5 @@ frontend/node_modules
 backend/node_modules
 frontend/.env
 backend/.env
+backend/dist
+frontend/build
