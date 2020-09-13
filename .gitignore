@@ -108,4 +108,4 @@ backend/node_modules
 frontend/.env
 backend/.env
 backend/dist
-# frontend/build
+frontend/build
