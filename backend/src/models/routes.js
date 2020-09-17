@@ -1,7 +1,9 @@
 import { Router } from 'express';
-import helperRouter from './helper/helper.routes'
+import gameRouter from './game/game.routes'
+import playerActionsRouter from './playerActions/playerActions.routes'
 
 const router = Router();
-router.use('/helper', helperRouter)
+router.use('/game', gameRouter)
+router.use('/:gameId/player-actions/:playerId', playerActionsRouter)
 
 export default router

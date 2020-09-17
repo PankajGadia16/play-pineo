@@ -9,5 +9,10 @@ export default {
     PER_PAGE_SIZE: 10,
     JWT_PRIVATE_KEY: "random private key",
     MONGO_URL: process.env.MONGO_URL || "mongodb://127.0.0.1:27017/",
-    DATABASE_NAME: "pineo"
+    DATABASE_NAME: "pineo",
+    VALID_PLAYER_IDS: ["player1", "player2", "player3", "player4"],
+    CARD_REGEX: /^((2|3|4|5|6|7|8|9|10|11|12|13|14)(S|H|D|C)|PINEO)$/igm,
+    RANK_REGEX: /^(2|3|4|5|6|7|8|9|10|11|12|13|14)/igm,
+    BUNCH_ID_REGEX: /^B(((S|H|D|C)(1|2)\d)|(3|14))$/igm,
+    GAME_ID_LENGTH: 6
 }

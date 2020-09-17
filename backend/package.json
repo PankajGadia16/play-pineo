@@ -36,7 +36,8 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
     "rimraf": "3.0.0",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "socket.io": "^2.3.0"
   },
   "author": "Pankaj Gadia",
   "license": "ISC",
