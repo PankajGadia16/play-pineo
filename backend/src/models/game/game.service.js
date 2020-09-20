@@ -54,6 +54,9 @@ export default {
         }
         await gameFacade.updateOne(game, fieldsToUpdate)
         await socketClient.emitByGameId(entry.gameId)
+        return {
+            playerId
+        }
 
     },
     start: async function (entry) {
@@ -71,7 +74,7 @@ export default {
             exceptionHandler.throwError("4 active players are necessary!")
         }
 
-        const deck = helpers.prepareDeck()
+        const deck = game.centerHeap
         const shuffledDeck = helpers.shuffleDeck(deck)
         const { heap, inHandCards } = helpers.distributeCards(shuffledDeck)
 

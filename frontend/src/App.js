@@ -1,17 +1,25 @@
 import React from 'react';
 import Head from './Components/Head';
+import Game from './Components/Game'
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Route
+} from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Hello World!
+    <Router>
+      <div className="App">
+        <header className="App-header">
+          <p>
+            Welcome to Pineo King!
         </p>
-        <Head/>
-      </header>
-    </div>
+          <Route exact path="/" component={Head} />
+          <Route path="/game" component={Game} />
+        </header>
+      </div>
+    </Router>
   );
 }
 

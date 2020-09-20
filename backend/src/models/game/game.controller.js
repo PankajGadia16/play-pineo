@@ -31,9 +31,7 @@ export default {
     join: async (req, res, next) => {
         try {
             const { body } = req
-            console.log(body)
-            await service.join(body)
-            return res.status(STATUS_CODES.OK).send();
+            return res.status(STATUS_CODES.OK).json(await service.join(body));
         }
         catch (err) {
             if (err.statusCode) {

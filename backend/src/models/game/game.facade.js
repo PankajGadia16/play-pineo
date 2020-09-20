@@ -42,7 +42,7 @@ export default {
                 totalNoOfSets: 0,
                 TotalNoOfPureSets: 0
             },
-            centerHeap: [],
+            centerHeap: helpers.prepareDeck(),
             centerStack: [],
             turn: {
                 teamId: null,
@@ -67,8 +67,7 @@ export default {
         return createdEntry
     },
     updateOne: async function (game, fieldsToUpdate) {
-
         const db = await dbCLient.getDb()
-        return await db.collection(GAMES_COLLECTION_NAME).updateOne(game, fieldsToUpdate)
+        return await db.collection(GAMES_COLLECTION_NAME).updateOne({ gameId: game.gameId }, fieldsToUpdate)
     }
 }
