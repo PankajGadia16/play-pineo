@@ -2,7 +2,7 @@ import React from 'react';
 import constants from '../utils/constants'
 import axios from "axios";
 import { withRouter } from 'react-router-dom'
-
+import { Button } from 'react-bootstrap'
 
 class NewGame extends React.Component {
 
@@ -59,8 +59,8 @@ class NewGame extends React.Component {
                 {
                     (errorMessage != null) ? <h4>{errorMessage}</h4> :
                         <div>
-                            <input placeholder="Name" id="name" value={this.state.name} onChange={this.handleChange} />
-                            <button onClick={this.create}>Create</button>
+                            <input style={{ margin: 8 }} class="form-control" placeholder="Name" id="name" value={this.state.name} onChange={this.handleChange} />
+                            <Button style={{ margin: 8 }} onClick={this.create}>Create</Button>
                         </div>
                 }
             </div>

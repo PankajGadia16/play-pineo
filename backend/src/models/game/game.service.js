@@ -86,7 +86,7 @@ export default {
                 centerStack,
                 turn: {
                     teamId: "teamA",
-                    plaerId: "player1",
+                    playerId: "player1",
                     position: "CARD_NOT_PICKED"
                 },
                 state: "IN_PROGRESS",

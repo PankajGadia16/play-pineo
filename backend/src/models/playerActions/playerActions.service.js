@@ -9,7 +9,8 @@ export default {
     getHeapCard: async function (game, playerId) {
         const card = game.centerHeap.pop()
         const teamId = helpers.getTeamIdFromPlayerId(playerId)
-        let cardsInHand = game[teamId + "." + playerId + ".cardsInHand"]
+
+        let cardsInHand = game[teamId][playerId].cardsInHand
         cardsInHand.push(card)
 
         const fieldsToUpdate = {
@@ -26,7 +27,7 @@ export default {
     getStackCard: async function (entry, game, playerId) {
 
         //validate
-        const { error } = validateGetStackCard(entry, game)
+        const error = validateGetStackCard(entry, game)
         if (error) exceptionHandler.throwError(error)
 
         const teamId = helpers.getTeamIdFromPlayerId(playerId)
@@ -48,7 +49,7 @@ export default {
     placeCard: async function (entry, game, playerId) {
 
         //validate
-        const { error } = validatePlaceCard(entry, game, playerId)
+        const error = validatePlaceCard(entry, game, playerId)
         if (error) exceptionHandler.throwError(error)
 
         const teamId = helpers.getTeamIdFromPlayerId(playerId)
@@ -91,7 +92,7 @@ export default {
     addBunch: async function (entry, game, playerId) {
 
         //validate
-        const { error } = validateAddBunch(entry)
+        const error = validateAddBunch(entry, game, playerId)
         if (error) exceptionHandler.throwError(error)
 
         const newBunches = bunchActions.modifyBunch(entry.cards, game, playerId)
@@ -124,7 +125,7 @@ export default {
     updateBunch: async function (entry, game, playerId) {
 
         //validate
-        const { error } = valiadteUpdateBunch(entry, game, playerId)
+        const error = valiadteUpdateBunch(entry, game, playerId)
         if (error) exceptionHandler.throwError(error)
 
 
@@ -162,7 +163,7 @@ export default {
     mergeBunch: async function (entry, game, playerId) {
 
         //validate
-        const { error } = validateMergeBunch(entry, game, playerId)
+        const error = validateMergeBunch(entry, game, playerId)
         if (error) exceptionHandler.throwError(error)
 
         const teamId = helpers.getTeamIdFromPlayerId(playerId)
@@ -197,7 +198,7 @@ export default {
     show: async function (entry, game, playerId) {
 
         //validate
-        const { error } = validateShow(entry, game, playerId)
+        const error = validateShow(entry, game, playerId)
         if (error) exceptionHandler.throwError(error)
 
         const scores = helpers.calculateScores(game)

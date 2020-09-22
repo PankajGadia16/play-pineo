@@ -5,8 +5,8 @@ export default {
 
     getHeapCard: async (req, res, next) => {
         try {
-            const { game } = req
-            return res.status(STATUS_CODES.OK).json(await service.getHeapCard(game));
+            const { game, playerId } = req
+            return res.status(STATUS_CODES.OK).json(await service.getHeapCard(game, playerId));
         }
         catch (err) {
             if (err.statusCode) {
@@ -46,7 +46,8 @@ export default {
     addBunch: async (req, res, next) => {
         try {
             const { body, game, playerId } = req
-            return res.status(STATUS_CODES.OK).json(await service.addBunch(body, game, playerId));
+            await service.addBunch(body, game, playerId)
+            return res.status(STATUS_CODES.OK).send();
         }
         catch (err) {
             if (err.statusCode) {
@@ -59,7 +60,8 @@ export default {
     updateBunch: async (req, res, next) => {
         try {
             const { body, game, playerId } = req
-            return res.status(STATUS_CODES.OK).json(await service.updateBunch(body, game, playerId));
+            await service.updateBunch(body, game, playerId)
+            return res.status(STATUS_CODES.OK).send();
         }
         catch (err) {
             if (err.statusCode) {
@@ -72,7 +74,8 @@ export default {
     mergeBunch: async (req, res, next) => {
         try {
             const { body, game, playerId } = req
-            return res.status(STATUS_CODES.OK).json(await service.mergeBunch(body, game, playerId));
+            await service.mergeBunch(body, game, playerId)
+            return res.status(STATUS_CODES.OK).send();
         }
         catch (err) {
             if (err.statusCode) {
@@ -85,7 +88,8 @@ export default {
     show: async (req, res, next) => {
         try {
             const { body, game, playerId } = req
-            return res.status(STATUS_CODES.OK).json(await service.show(body, game, playerId));
+            await service.show(body, game, playerId)
+            return res.status(STATUS_CODES.OK).send();
         }
         catch (err) {
             if (err.statusCode) {

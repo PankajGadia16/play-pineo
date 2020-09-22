@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom'
 import constants from '../utils/constants'
 import axios from "axios";
-
+import { Button } from 'react-bootstrap'
 class JoinGame extends React.Component {
 
     constructor(props) {
@@ -58,9 +58,9 @@ class JoinGame extends React.Component {
                 {
                     (errorMessage != null) ? <h4>{errorMessage}</h4> :
                         <div>
-                            <input placeholder="Name" id="name" value={this.state.name} onChange={this.handleChange} />
-                            <input placeholder="Game Id" id="gameId" value={this.state.gameId} onChange={this.handleChange} />
-                            <button onClick={this.join}>Join</button>
+                            <input style={{ margin: 8 }} class="form-control" placeholder="Name" id="name" value={this.state.name} onChange={this.handleChange} />
+                            <input style={{ margin: 8 }} class="form-control" placeholder="Game code" id="gameId" value={this.state.gameId} onChange={this.handleChange} />
+                            <Button style={{ margin: 8 }} onClick={this.join}>Join</Button>
                         </div>
                 }
             </div>

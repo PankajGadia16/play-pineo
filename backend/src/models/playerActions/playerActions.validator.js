@@ -29,12 +29,13 @@ export const validatePlaceCard = function (entry, game, playerId) {
     return null
 }
 
-export const validateAddBunch = function (entry) {
+export const validateAddBunch = function (entry, game, playerId) {
     const schema = {
         cards: Joi.array().items(
-            Joi.regex(constants.CARD_REGEX).string()
+            Joi.string()
         ).min(3).required()
     }
+
     const { error = null } = Joi.validate(entry, schema)
     if (error) return error.details[0].message
 
@@ -46,10 +47,8 @@ export const validateAddBunch = function (entry) {
         }
     }
 
-    if (!helpers.isValidBunch(entry.cards) || !helpers.isValidTrio(entry.cards)) {
-        return "Invalid sequence of cards!"
-    }
-    return null
+    if (helpers.isValidBunch(entry.cards) || helpers.isValidTrio(entry.cards)) { return null }
+    return "Invalid sequence of cards!"
 }
 export const valiadteUpdateBunch = function (entry, game, playerId) {
     const schema = {
@@ -84,10 +83,10 @@ export const valiadteUpdateBunch = function (entry, game, playerId) {
         return "Invalid position to insert the card!"
     }
     const newBunch = helpers.getUpdatedBunch(bunchCards, entry)
-    if (!helpers.isValidBunch(newBunch) || !helpers.isValidTrio(newBunch)) {
-        return "Bad request"
+    if (helpers.isValidBunch(newBunch) || helpers.isValidTrio(newBunch)) {
+        return null
     }
-    return null
+    return "Bad request"
 }
 export const validateMergeBunch = function (entry, game, playerId) {
     const schema = {
@@ -101,16 +100,12 @@ export const validateMergeBunch = function (entry, game, playerId) {
     const bunchCards1 = game[teamId][playerId].dashboard.bunches[entry.bunchId1]
     const bunchCards2 = game[teamId][playerId].dashboard.bunches[entry.bunchId2]
     const mergedBunch = bunchCards1.concat(bunchCards2)
-    if (
-        bunchCards1 == null ||
-        bunchCards2 == null ||
-        !helpers.isValidBunch(mergedBunch) ||
-        !helpers.isValidTrio(mergedBunch)
-    ) {
-        return "Requested sequences can't be merged!"
-    }
-    return null
+
+    if (bunchCards1 == null || bunchCards2 == null) { return "Invalid Request!" }
+    if (helpers.isValidBunch(mergedBunch) || helpers.isValidTrio(mergedBunch)) { return null }
+    return "Requested sequences can't be merged!"
 }
+
 export const validateShow = function (entry, game, playerId) {
     const schema = {
         card: Joi.string().regex(constants.CARD_REGEX).required()

@@ -1,6 +1,7 @@
 import React from 'react';
 import PlayingCardsList from './../utils/playingCardsList'
 import helpers from './../utils/helpers'
+import { Droppable, Draggable } from 'react-beautiful-dnd'
 
 export default class HandCards extends React.Component {
     constructor(props) {
@@ -57,7 +58,7 @@ export default class HandCards extends React.Component {
 
         return {
             'zIndex': num,
-            "marginLeft": (myPlayerId == playerId) ? -72 : -77,
+            "marginLeft": (myPlayerId == playerId) ? -68 : -77,
             "height": 120
         }
     }
@@ -67,30 +68,63 @@ export default class HandCards extends React.Component {
     }
 
     getTransform = (playerId, myPlayerId) => {
-        return (helpers.getTeamIdFromPlayerId(playerId) == helpers.getTeamIdFromPlayerId(myPlayerId)) ? "rotate(0deg)" : "rotate(270deg)"
+        return (helpers.getTeamIdFromPlayerId(playerId) == helpers.getTeamIdFromPlayerId(myPlayerId)) ? "null" : "rotate(270deg)"
     }
+
     render() {
         let index = 0
         const { playerId, myPlayerId } = this.state
         return (
-            <div style={{
-                display: "flex",
-                transform: this.getTransform(playerId, myPlayerId)
-            }}>
+            <Droppable
+                direction={"horizontal"}
+                isDropDisabled={playerId != myPlayerId}
+                droppableId={`handCards-${playerId}`}
+            >
+                {(provided) => (
+                    <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        >
+                        <div
+                            style={{
+                                display: "flex",
+                                transform: this.getTransform(playerId, myPlayerId)
+                            }}
+                        >
+                            {
+                                this.state.cards.map((card, index2) => {
+                                    return (
+                                        <Draggable
+                                            isDragDisabled={playerId != myPlayerId}
+                                            draggableId={`${card}-${playerId}-${index2}`}
+                                            index={index2}
+                                        >
+                                            {
+                                                (draggableProvided) => (
+                                                    <div
+                                                        ref={draggableProvided.innerRef}
+                                                        {...draggableProvided.draggableProps}
+                                                        {...draggableProvided.dragHandleProps}
+                                                    >
 
-                {
-                    this.state.cards.map(card => {
-                        return (
-                            <img
-                                style={this.stackStyle(index++, myPlayerId, playerId)}
-                                className='Playing-card'
-                                alt={card}
-                                src={this.getSrc(card, myPlayerId, playerId)}
-                            />
-                        )
-                    })
-                }
-            </div>
+                                                        <img
+                                                            style={this.stackStyle(index++, myPlayerId, playerId)}
+                                                            className='Playing-card'
+                                                            alt={card}
+                                                            src={this.getSrc(card, myPlayerId, playerId)}
+                                                        />
+                                                    </div>)
+                                            }
+
+                                        </Draggable>
+                                    )
+                                })
+                            }
+                        </div>
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
         )
     }
 }

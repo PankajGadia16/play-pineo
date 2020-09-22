@@ -10,6 +10,9 @@ import CardDropWindow from './CardDropWindow'
 import ActionWindow from './ActionWindow'
 import GameMessageBox from './GameMessageBox'
 import io from 'socket.io-client'
+import { DragDropContext } from 'react-beautiful-dnd'
+import helpers from '../utils/helpers';
+import { Button } from 'react-bootstrap'
 
 const DEFAULT_ERROR_MESSAGE = "Something went wrong! please refresh or try again to join the game! "
 export default class Game extends React.Component {
@@ -30,7 +33,8 @@ export default class Game extends React.Component {
             game: undefined,
             myPlayerId,
             gameId,
-            socket: io(constants.SERVER_HOST)
+            socket: io(constants.SERVER_HOST),
+            cardDropWindowCards: []
         }
     }
 
@@ -126,18 +130,67 @@ export default class Game extends React.Component {
         }
     }
 
+    onDragEnd = result => {
+
+        const { game: { turn: { playerId: turnPlayerId = null, position: turnPosition = null } = {} } = {}, myPlayerId, cardDropWindowCards } = this.state
+        const { source: { index: sourceIndex, droppableId: sourceDroppableId = null } = {}, destination, draggableId = null } = result
+        const { droppableId: destinationDroppableId = null, index: dropIndex } = destination || {}
+
+        if (myPlayerId != turnPlayerId || turnPosition != "CARD_PICKED") return
+
+        const cardMoved = draggableId.split("-")[0]
+        const teamId = helpers.getTeamIdFromPlayerId(myPlayerId)
+        const cardsInHand = Array.from(this.state.game[teamId][myPlayerId].cardsInHand)
+        const newCardDropWindowCards = Array.from(cardDropWindowCards)
+
+
+        if (sourceDroppableId == `handCards-${myPlayerId}` && destinationDroppableId == "cardDropWindow") {
+            cardsInHand.splice(sourceIndex, 1)
+            newCardDropWindowCards.splice(dropIndex, 0, cardMoved)
+        }
+        else if (sourceDroppableId == "cardDropWindow" && destinationDroppableId == `handCards-${myPlayerId}`) {
+            cardsInHand.splice(dropIndex, 0, cardMoved)
+            newCardDropWindowCards.splice(sourceIndex, 1)
+        }
+        else if (sourceDroppableId == `cardDropWindow` && destinationDroppableId == "cardDropWindow") {
+            newCardDropWindowCards.splice(sourceIndex, 1)
+            newCardDropWindowCards.splice(dropIndex, 0, cardMoved)
+        }
+        else return
+
+        this.setState({
+            game: {
+                ...this.state.game,
+                [teamId]: {
+                    ...this.state.game[teamId],
+                    [myPlayerId]: {
+                        ...this.state.game[teamId][myPlayerId],
+                        cardsInHand
+                    }
+                }
+            },
+            cardDropWindowCards: newCardDropWindowCards
+        })
+
+    }
 
     render() {
         const {
             game: {
                 noOfActivePlayers = null,
                 state = null,
-                turn = null,
+                turn: {
+                    teamId: turnTeamId = null,
+                    playerId: turnPlayerId = null,
+                    position: turnPosition = null
+                } = {},
             } = {},
             isActive,
             errroMessage,
             myPlayerId,
-            gameId } = this.state
+            cardDropWindowCards,
+            gameId
+        } = this.state
 
 
         const {
@@ -148,149 +201,159 @@ export default class Game extends React.Component {
         } = this.getPlayerDetails(myPlayerId)
 
         return (
-            <div style={{ backgroundColor: "red" }}>
+            <div >
                 {
                     (isActive == false) ?
                         (errroMessage == null) ? <h4>Loading...</h4> : <h4>{errroMessage}</h4>
-                        : <div style={{
-                            "display": "flex",
-                            "justify-content": "space-between",
-                            "align-items": "center",
-                            "flex-flow": "column nowrap",
-
-                        }}>
+                        : <DragDropContext
+                            onDragEnd={this.onDragEnd}>
                             <div style={{
                                 "display": "flex",
-                                "flex- flow": "row nowrap",
                                 "justify-content": "space-between",
                                 "align-items": "center",
-                                "align-self": "center",
-                                "order": 1
-                            }} >
-                                <div >
+                                "flex-flow": "column nowrap",
+
+                            }}>
+                                <p style={{
+                                    "display": "flex",
+                                    "align-self": "center",
+                                }}>
+                                    {(state == "IN_PROGRESS") ? `${this.state.game[turnTeamId][turnPlayerId].name}'s turn [ ${turnPosition.split("_").join(" ").toLowerCase()} ]` : null}
+                                </p>
+                                <div style={{
+                                    "display": "flex",
+                                    "flex-flow": "row nowrap",
+                                    "justify-content": "space-between",
+                                    "align-items": "center",
+                                    "align-self": "center",
+                                    "order": 2
+                                }} >
+                                    <div >
+                                        <Player
+                                            myPlayerId={myPlayerId}
+                                            game={this.state.game}
+                                            playerId={topPlayerId}
+                                        />
+                                        <HandCards
+                                            game={this.state.game}
+                                            myPlayerId={myPlayerId}
+                                            playerId={topPlayerId}
+                                        />
+                                    </div>
+                                </div>
+                                <div style={{
+                                    "display": "flex",
+                                    "flex-flow": "row nowrap",
+                                    "justify-content": "space-between",
+                                    "align-items": "center",
+                                    "order": 3
+                                }}>
+
                                     <Player
                                         myPlayerId={myPlayerId}
                                         game={this.state.game}
-                                        playerId={topPlayerId}
+                                        playerId={leftPlayerId}
                                     />
                                     <HandCards
                                         game={this.state.game}
                                         myPlayerId={myPlayerId}
-                                        playerId={topPlayerId}
+                                        playerId={leftPlayerId}
                                     />
-                                </div>
-                            </div>
-                            <div style={{
-                                "display": "flex",
-                                "flex- flow": "row nowrap",
-                                "justify-content": "space-between",
-                                "align-items": "center",
-                                "order": 2
-                            }}>
-
-                                <Player
-                                    myPlayerId={myPlayerId}
-                                    game={this.state.game}
-                                    playerId={leftPlayerId}
-                                />
-                                <HandCards
-                                    game={this.state.game}
-                                    myPlayerId={myPlayerId}
-                                    playerId={leftPlayerId}
-                                />
-                                <Dashboard
-                                    game={this.state.game}
-                                    myPlayerId={myPlayerId}
-                                    playerId={leftPlayerId}
-                                />
-                                <div style={{
-                                    "display": "flex",
-                                    "flex-flow": "column nowrap",
-                                    "justify-content": "space-between",
-                                    "align-items": "center"
-                                }}>
-                                    {(state != "IN_PROGRESS") ?
-                                        ((noOfActivePlayers == 4) ?
-                                            <button
-                                                onClick={this.onStartPlay}
-                                            >Start the play</button> :
-                                            <GameMessageBox
-                                                game={this.state.game}
-                                            />)
-
-                                        : <Dashboard
-                                            myPlayerId={myPlayerId}
-                                            playerId={topPlayerId}
-                                            game={this.state.game}
-                                        />}
+                                    <Dashboard
+                                        game={this.state.game}
+                                        myPlayerId={myPlayerId}
+                                        playerId={leftPlayerId}
+                                    />
                                     <div style={{
                                         "display": "flex",
-                                        "flex-flow": "row nowrap",
+                                        "flex-flow": "column nowrap",
                                         "justify-content": "space-between",
                                         "align-items": "center"
                                     }}>
-                                        <CenterStack
+                                        {(state != "IN_PROGRESS") ?
+                                            ((noOfActivePlayers == 4) ?
+                                                <Button
+                                                    onClick={this.onStartPlay}
+                                                >Start the play</Button> :
+                                                <GameMessageBox
+                                                    game={this.state.game}
+                                                />)
+
+                                            : <Dashboard
+                                                myPlayerId={myPlayerId}
+                                                playerId={topPlayerId}
+                                                game={this.state.game}
+                                            />}
+                                        <div style={{
+                                            "display": "flex",
+                                            "flex-flow": "row nowrap",
+                                            "justify-content": "space-between",
+                                            "align-items": "center"
+                                        }}>
+                                            <CenterStack
+                                                game={this.state.game}
+                                                myPlayerId={myPlayerId}
+                                            />
+                                            <CenterHeap
+                                                game={this.state.game}
+                                                myPlayerId={myPlayerId}
+                                            />
+                                        </div>
+                                        <Dashboard
                                             game={this.state.game}
                                             myPlayerId={myPlayerId}
-                                        />
-                                        <CenterHeap
-                                            game={this.state.game}
-                                            myPlayerId={myPlayerId}
+                                            playerId={bottomPlayerId}
                                         />
                                     </div>
                                     <Dashboard
                                         game={this.state.game}
                                         myPlayerId={myPlayerId}
-                                        playerId={bottomPlayerId}
+                                        playerId={rightPlayerId}
                                     />
-                                </div>
-                                <Dashboard
-                                    game={this.state.game}
-                                    myPlayerId={myPlayerId}
-                                    playerId={rightPlayerId}
-                                />
-                                <HandCards
-                                    game={this.state.game}
-                                    myPlayerId={myPlayerId}
-                                    playerId={rightPlayerId}
-                                />
-                                <Player
-                                    myPlayerId={myPlayerId}
-                                    game={this.state.game}
-                                    playerId={rightPlayerId}
-                                />
-                            </div>
-                            <div style={{
-                                "display": "flex",
-                                "flex- flow": "row nowrap",
-                                "justify-content": "space-between",
-                                "align-items": "center",
-                                "align-self": "center",
-                                "order": 3
-                            }} >
-                                <CardDropWindow
-                                    game={this.state.game}
-                                    myPlayerId={myPlayerId}
-                                />
-                                <div>
                                     <HandCards
                                         game={this.state.game}
                                         myPlayerId={myPlayerId}
-                                        playerId={bottomPlayerId}
+                                        playerId={rightPlayerId}
                                     />
                                     <Player
                                         myPlayerId={myPlayerId}
                                         game={this.state.game}
-                                        playerId={bottomPlayerId}
+                                        playerId={rightPlayerId}
                                     />
-
                                 </div>
-                                <ActionWindow
-                                    game={this.state.game}
-                                    myPlayerId={myPlayerId}
-                                />
+                                <div style={{
+                                    "display": "flex",
+                                    "flex-flow": "row nowrap",
+                                    "justify-content": "space-between",
+                                    "align-items": "center",
+                                    "align-self": "center",
+                                    "order": 4
+                                }} >
+                                    <ActionWindow
+                                        game={this.state.game}
+                                        myPlayerId={myPlayerId}
+                                    />
+                                    <div>
+                                        <HandCards
+                                            game={this.state.game}
+                                            myPlayerId={myPlayerId}
+                                            playerId={bottomPlayerId}
+                                        />
+                                        <Player
+                                            myPlayerId={myPlayerId}
+                                            game={this.state.game}
+                                            playerId={bottomPlayerId}
+                                        />
+
+                                    </div>
+                                    <CardDropWindow
+                                        game={this.state.game}
+                                        myPlayerId={myPlayerId}
+                                        cardDropWindowCards={cardDropWindowCards}
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        </DragDropContext>
                 }
             </div>
         )

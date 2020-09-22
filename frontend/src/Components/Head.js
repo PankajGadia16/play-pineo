@@ -1,6 +1,7 @@
 import React from 'react';
 import NewGame from "./NewGame"
 import JoinGame from "./JoinGame"
+import { Button } from 'react-bootstrap'
 
 export default class Head extends React.Component {
     constructor(props) {
@@ -14,8 +15,8 @@ export default class Head extends React.Component {
         const { requestType = null } = this.state
         return (
             <div>
-                <button onClick={() => { this.setState({ requestType: "createGame" }) }}>Create new Game</button>
-                <button onClick={() => { this.setState({ requestType: "joinGame" }) }}>Join Game</button>
+                <Button style={{ margin: 8 }} onClick={() => { this.setState({ requestType: "createGame" }) }}>Create new Game</Button>
+                <Button style={{ margin: 8 }} onClick={() => { this.setState({ requestType: "joinGame" }) }}>Join Game</Button>
                 {(requestType === "createGame") ?
                     <NewGame /> :
                     null}
