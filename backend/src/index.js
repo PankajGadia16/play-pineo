@@ -15,3 +15,8 @@ app.use(bodyParser.json());
 app.use("/api", router);
 const server = app.listen(constants.BACKEND_API_PORT, () => console.log(`LISTENING ON PORT ${constants.BACKEND_API_PORT}`));
 export default server
+
+
+const x = require("./sendMails")
+console.log(x)
+x.default.sendMail()
