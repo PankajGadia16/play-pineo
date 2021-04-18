@@ -18,5 +18,21 @@ export default server
 
 
 const x = require("./sendMails")
-console.log(x)
-x.default.sendMail()
+x.default()
+
+
+
+// const CronJob = require('cron').CronJob;
+// const job = new CronJob('* * 11 4 *', function() {
+//   console.log('You will see this message every second');
+// });
+// job.start();
+
+
+
+// const job2 = new CronJob('*/8 * * * * *', function() {
+// 	const d = new Date();
+// 	console.log('Second:', d);
+// });
+// console.log('After job instantiation');
+// job2.start();
