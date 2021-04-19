@@ -7,7 +7,7 @@ const baseDetails = {
     subject: "To the love of my life... ❤️❤️❤️"
 }
 
-const letters = [12,3,4,5,6]
+const letters = [1,2,3,4,5,6]
 
 export default async function () {
 
