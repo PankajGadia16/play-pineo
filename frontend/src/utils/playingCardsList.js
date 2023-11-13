@@ -7,7 +7,7 @@ for (let i = 2; i < 15; i++) {
 		PlayingCardsList[i + suit] = require('./../CardImages/' + i + suit.toLowerCase() + '.svg');
 	}
 }
-PlayingCardsList.back = require('./../CardImages/back.svg');
+PlayingCardsList.back = require('./../CardImages/back.png');
 PlayingCardsList.PINEO = require('./../CardImages/pineo.png')
 export default PlayingCardsList;
 

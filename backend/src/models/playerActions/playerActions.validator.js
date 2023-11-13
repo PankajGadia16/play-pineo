@@ -17,9 +17,7 @@ export const validatePlaceCard = function (entry, game, playerId) {
     const schema = {
         card: Joi.string().regex(constants.CARD_REGEX).required()
     }
-
     const { error = null } = Joi.validate(entry, schema)
-
     const teamId = helpers.getTeamIdFromPlayerId(playerId)
     const cards = game[teamId][playerId].cardsInHand
 

@@ -52,7 +52,7 @@ export default class CenterHeap extends React.Component {
                                 style={this.stackStyle(index++)}
                                 className='Playing-card'
                                 alt={card}
-                                src={require('./../CardImages/back.svg')}
+                                src={require('./../CardImages/back.png')}
                             />
                         )
                     })

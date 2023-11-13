@@ -53,7 +53,7 @@ export default {
         if (error) exceptionHandler.throwError(error)
 
         const teamId = helpers.getTeamIdFromPlayerId(playerId)
-        let cardsInHand = game[teamId + "." + playerId + ".cardsInHand"]
+        let cardsInHand = game[teamId][playerId].cardsInHand
         cardsInHand.splice(cardsInHand.indexOf(entry.card), 1)
 
         let fieldsToUpdate = {
